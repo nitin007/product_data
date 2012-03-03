@@ -1,0 +1,67 @@
+body
+{
+	margin:0px;
+	padding:0px;
+}
+
+
+.header
+{
+	display:block;
+	width:1280px;
+	border:3px solid #9C6340;
+}
+
+.headerText
+{
+	margin-left:500px;
+	color:#656664;
+}
+
+.brand
+{
+	display:block;
+	float:left;
+	width:120px;
+	height:500px;
+	border-right:3px solid 	#9C6340;
+	border-left:3px solid 	#9C6340;
+	border-bottom:3px solid #9C6340;
+}
+
+.color
+{
+	display:block;
+	float:left;
+	width:120px;
+	height:500px;
+	border-right:3px solid 	#9C6340;
+	border-bottom:3px solid #9C6340;
+}
+
+.availability
+{
+	display:block;
+	float:left;
+	width:120px;
+	height:500px;
+	border-right:3px solid 	#9C6340;
+	border-bottom:3px solid #9C6340;
+}
+
+.display
+{
+	display:block;
+	float:left;
+	width:910px;
+	height:500px;
+	border-right:3px solid 	#9C6340;
+	border-bottom:3px solid #9C6340;
+}
+
+.display img
+{
+	width:100px;
+	height:100px;
+	margin:2px 3px;
+}
