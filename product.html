@@ -6,7 +6,7 @@
 		
 		<script type="text/javascript" src="Filter/jquery.js"></script>	
 		
-		<script type="text/javascript" src="Filter/filter.js"></script>	
+		<script type="text/javascript" src="Filter/test.js"></script>	
 		
 	</head>
 	
@@ -16,9 +16,17 @@
 		
 		
 			<div class="header">
+				<select id="sort">
+					<option value="select" selected="selected">Select</option>
+					<option value="name">Sort By Brand Name</option>
+					<option value="color">Sort By Color</option>
+					<option value="avail">Sort By Availability</option>
+				</select>
+
 				<div class="headerText">
 					<h1>Product Catalogue</h1>
 				</div>
+				
 			</div>
 		
 		
@@ -56,11 +64,11 @@
 		
 			
 			<div class="availability">
-				<label for="available">Available</lable>
-				<input type="checkbox" id="available" value="0"/>
-				<br/>
-				<label for="sold">Sold</lable>
-				<input type="checkbox" id="sold" value="1"/>
+				<select id="toggle">
+					<option value="select" selected="selected">Select</option>
+					<option value="avail">Available</option>
+					<option value="sold">sold</option>
+				</select>
 			</div>
 			
 			
