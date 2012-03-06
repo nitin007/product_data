@@ -4,13 +4,7 @@ $(function(){
 	
 	var initState = function()
 	{
-		if($('div input:checked').length)
-		{;}
-		else
-		{
-			$('input').attr('checked', false);
-		}
-	
+		//appending products to the document
 		var q;
 		for(i=0;i<products.length;i++)
 		{
@@ -23,7 +17,7 @@ $(function(){
 	
 	var brandName = function()
 	{
-	
+		//building an array of unique brand names
 		var brandList = [];
 		var count1=0;
 		brandList.push(products[0].brand);
@@ -47,6 +41,7 @@ $(function(){
 		
 		for(i=0;i<brandList.length;i++)
 		{		
+			// writing brand names on document and setting the attr values as well
 			$('div.brand label')[i].innerHTML = brandList[i];
 			$($('div.brand input')[i]).attr('value', brandList[i]);
 		}
@@ -56,6 +51,7 @@ $(function(){
 	
 	var brandColor = function()
 	{
+		//building an array of unique color names
 		var clrNames = [];
 		var count=0;
 		clrNames.push(products[0].color);
@@ -79,6 +75,7 @@ $(function(){
 	
 		for(i=0;i<clrNames.length;i++)
 		{		
+			// writing color names on document and setting the attr values as well
 			$('div.color label')[i].innerHTML = clrNames[i];
 			$($('div.color input')[i]).attr('value', clrNames[i]);
 		}
@@ -94,14 +91,14 @@ $(function(){
 	brandColor();
 	
 	
-	var flagSort;
+
 	$('#sort').change(function(){
 		var sortBy = $('#sort option:selected').attr('value');
-		flagSort = 1;
 		var sorted = [];
 		
 		if(sortBy==='name')
 		{
+			//sorting of json object by brand names
 			var brands = brandName();
 			$('img').remove();
 			for(i=0;i<brands.length;i++)
@@ -135,6 +132,7 @@ $(function(){
 		
 		else if(sortBy==='color')
 		{
+			//sorting of json object by color names
 			$('img').remove();
 			var colors = brandColor();
 			for(i=0;i<colors.length;i++)
@@ -177,10 +175,9 @@ $(function(){
 			step:5,
 			min: 5,
 			max: 100,
-			values: [ 5, 100 ],
+			values: [ 30, 70 ],
 			slide: function( event, ui ) {
 				$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-				
 				filterProducts();
 			}
 		
@@ -193,15 +190,19 @@ $(function(){
 		
 
 
-	
+	//toggling between available and sold products
 	$('#toggle').change(function(){
 			filterProducts();
 	});
 	
+	
+	//filter products based on selection
 	$('input').click(function(){
 		filterProducts();		
 	});
 	
+	
+	//filter products based on selection criteria
 	function filterProducts()
 	{	
 		var count = 0;
@@ -232,10 +233,14 @@ $(function(){
 			clrNot.push($(this).attr('value'));
 		});
 
+
+		//checking checked checkboxes
 		if(flag)
 		{	
+			//either brand names or colors are checked
 			if(!(brand.length && clr.length))
 			{
+				//only brand names are checked
 				if(brand.length)
 				{
 					for(i=0;i<products.length;i++)
@@ -244,6 +249,7 @@ $(function(){
 						{
 							if((products[i].brand===brand[j]))
 							{
+								//checking drop-down selected item
 								if(availSold==='avail')
 								{
 									if(products[i].sold_out==='0')
@@ -314,6 +320,7 @@ $(function(){
 					}
 				}
 			
+				//only colors are checked
 				else
 				{
 					for(i=0;i<products.length;i++)
@@ -322,6 +329,7 @@ $(function(){
 						{
 							if((products[i].color===clr[j]))
 							{
+								//checking drop-down selected item
 								if(availSold==='avail')
 								{
 									if(products[i].sold_out==='0')
@@ -393,9 +401,10 @@ $(function(){
 				}
 			}
 		
+		
+			//both brand names and colors are checked
 			else
 			{
-		
 				for(i=0;i<brand.length;i++)
 				{
 					for(j=0;j<clr.length;j++)
@@ -408,14 +417,14 @@ $(function(){
 								{
 									if(products[k].sold_out==='0')
 									{
-										if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+										if(parseInt(products[k].price)>=minVal && parseInt(products[k].price)<=maxVal)
 										{
-											$($('img')[i]).show();
+											$($('img')[k]).show();
 										}
 			
 										else
 										{
-											$($('img')[i]).hide();
+											$($('img')[k]).hide();
 										}
 									}
 									
@@ -428,14 +437,14 @@ $(function(){
 								{
 									if(products[k].sold_out==='1')
 									{
-										if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+										if(parseInt(products[k].price)>=minVal && parseInt(products[k].price)<=maxVal)
 										{
-											$($('img')[i]).show();
+											$($('img')[k]).show();
 										}
 			
 										else
 										{
-											$($('img')[i]).hide();
+											$($('img')[k]).hide();
 										}
 									}
 									
@@ -447,14 +456,14 @@ $(function(){
 							
 								else
 								{
-									if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+									if(parseInt(products[k].price)>=minVal && parseInt(products[k].price)<=maxVal)
 									{
-										$($('img')[i]).show();
+										$($('img')[k]).show();
 									}
 		
 									else
 									{
-										$($('img')[i]).hide();
+										$($('img')[k]).hide();
 									}
 								}
 							}
@@ -493,7 +502,7 @@ $(function(){
 			}
 		}
 		
-		
+		//checkboxes are not checked
 		else
 		{
 			if(availSold==='avail')
