@@ -1,18 +1,23 @@
 $(function(){
-	var products = jQuery.parseJSON('[{"name":"1","url":"1.jpg","color":"Yellow","brand":"BRAND A","sold_out":"1"},{"name":"2","url":"2.jpg","color":"Red","brand":"BRAND B","sold_out":"0"},{"name":"3","url":"3.jpg","color":"Green","brand":"BRAND D","sold_out":"0"},{"name":"4","url":"4.jpg","color":"Red","brand":"BRAND A","sold_out":"1"},{"name":"5","url":"5.jpg","color":"Blue","brand":"BRAND B","sold_out":"0"},{"name":"6","url":"6.jpg","color":"Green","brand":"BRAND C","sold_out":"0"},{"name":"7","url":"7.jpg","color":"Red","brand":"BRAND C","sold_out":"1"},{"name":"8","url":"8.jpg","color":"Blue","brand":"BRAND D","sold_out":"0"},{"name":"9","url":"9.jpg","color":"Yellow","brand":"BRAND A","sold_out":"0"},{"name":"10","url":"10.jpg","color":"Yellow","brand":"BRAND B","sold_out":"1"},{"name":"11","url":"11.jpg","color":"Green","brand":"BRAND D","sold_out":"0"},{"name":"12","url":"12.jpg","color":"Yellow","brand":"BRAND D","sold_out":"0"},{"name":"13","url":"13.jpg","color":"Blue","brand":"BRAND A","sold_out":"0"},{"name":"14","url":"14.jpg","color":"Blue","brand":"BRAND D","sold_out":"0"},{"name":"15","url":"15.jpg","color":"Green","brand":"BRAND B","sold_out":"0"},{"name":"16","url":"16.jpg","color":"Yellow","brand":"BRAND B","sold_out":"1"},{"name":"17","url":"17.jpg","color":"Green","brand":"BRAND A","sold_out":"1"},{"name":"18","url":"18.jpg","color":"Blue","brand":"BRAND D","sold_out":"1"},{"name":"19","url":"19.jpg","color":"Green","brand":"BRAND C","sold_out":"0"},{"name":"20","url":"20.jpg","color":"Yellow","brand":"BRAND A","sold_out":"0"}]');
+	var products = jQuery.parseJSON('[{"name":"1","url":"1.jpg","color":"Yellow","brand":"BRAND A","sold_out":"1","price":"5"},{"name":"2","url":"2.jpg","color":"Red","brand":"BRAND B","sold_out":"0","price":"10"},{"name":"3","url":"3.jpg","color":"Green","brand":"BRAND D","sold_out":"0","price":"15"},{"name":"4","url":"4.jpg","color":"Red","brand":"BRAND A","sold_out":"1","price":"20"},{"name":"5","url":"5.jpg","color":"Blue","brand":"BRAND B","sold_out":"0","price":"25"},{"name":"6","url":"6.jpg","color":"Green","brand":"BRAND C","sold_out":"0","price":"30"},{"name":"7","url":"7.jpg","color":"Red","brand":"BRAND C","sold_out":"1","price":"35"},{"name":"8","url":"8.jpg","color":"Blue","brand":"BRAND D","sold_out":"0","price":"40"},{"name":"9","url":"9.jpg","color":"Yellow","brand":"BRAND A","sold_out":"0","price":"45"},{"name":"10","url":"10.jpg","color":"Yellow","brand":"BRAND B","sold_out":"1","price":"50"},{"name":"11","url":"11.jpg","color":"Green","brand":"BRAND D","sold_out":"0","price":"55"},{"name":"12","url":"12.jpg","color":"Yellow","brand":"BRAND D","sold_out":"0","price":"60"},{"name":"13","url":"13.jpg","color":"Blue","brand":"BRAND A","sold_out":"0","price":"65"},{"name":"14","url":"14.jpg","color":"Blue","brand":"BRAND D","sold_out":"0","price":"70"},{"name":"15","url":"15.jpg","color":"Green","brand":"BRAND B","sold_out":"0","price":"75"},{"name":"16","url":"16.jpg","color":"Yellow","brand":"BRAND B","sold_out":"1","price":"80"},{"name":"17","url":"17.jpg","color":"Green","brand":"BRAND A","sold_out":"1","price":"85"},{"name":"18","url":"18.jpg","color":"Blue","brand":"BRAND D","sold_out":"1","price":"90"},{"name":"19","url":"19.jpg","color":"Green","brand":"BRAND C","sold_out":"0","price":"95"},{"name":"20","url":"20.jpg","color":"Yellow","brand":"BRAND A","sold_out":"0","price":"100"}]');
 	
-	//alert("cnn">"bmm");
 	
 	var initState = function()
 	{
-		$('input').attr('checked', false);
+		if($('div input:checked').length)
+		{;}
+		else
+		{
+			$('input').attr('checked', false);
+		}
 	
 		var q;
 		for(i=0;i<products.length;i++)
 		{
 			q = products[i].url;
-			$('<img/>').attr('src', '/home/nitin-gupta/Desktop/product_data/images/'+q).appendTo('.display').show();
-		}
+			$($('<img/>')).attr('src', '/home/nitin-gupta/Desktop/product_data/images/'+q).appendTo('.display').show();
+		}	
+		
 	}
 	
 	
@@ -89,10 +94,10 @@ $(function(){
 	brandColor();
 	
 	
-	
+	var flagSort;
 	$('#sort').change(function(){
 		var sortBy = $('#sort option:selected').attr('value');
-		
+		flagSort = 1;
 		var sorted = [];
 		
 		if(sortBy==='name')
@@ -125,6 +130,7 @@ $(function(){
 			
 			products = sorted;
 			initState();
+			filterProducts();
 		}
 		
 		else if(sortBy==='color')
@@ -157,28 +163,56 @@ $(function(){
 			
 			products = sorted;
 			initState();
+			filterProducts();
+			
 		}
 		
 	});
 	
 	
+	(function()
+	{
+		$( "#slider-range" ).slider({
+			range: true,
+			step:5,
+			min: 5,
+			max: 100,
+			values: [ 5, 100 ],
+			slide: function( event, ui ) {
+				$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+				
+				filterProducts();
+			}
+		
+		});
 	
-	
+		$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+				" - $" + $( "#slider-range" ).slider( "values", 1 ) );
+
+	})();		
+		
+
+
 	
 	$('#toggle').change(function(){
+			filterProducts();
+	});
 	
-		var availSold = $('#toggle option:selected').attr('value');
-		
-		
-		
-		
+	$('input').click(function(){
+		filterProducts();		
+	});
+	
+	function filterProducts()
+	{	
 		var count = 0;
 		var brand=[];
 		var brandNot=[];
 		var clr=[];
 		var clrNot=[];
 		var flag = 0;
-		
+		var availSold = $('#toggle option:selected').attr('value');
+		var minVal = $( "#slider-range" ).slider( "values", 0 );
+		var maxVal = $( "#slider-range" ).slider( "values", 1 );
 		
 		$('div.brand input:checked').each(function(){
 			brand.push($(this).attr('value'));
@@ -212,10 +246,17 @@ $(function(){
 							{
 								if(availSold==='avail')
 								{
-									//alert(availSold);
 									if(products[i].sold_out==='0')
 									{
-										$($('img')[i]).show();
+										if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+										{
+											$($('img')[i]).show();
+										}
+			
+										else
+										{
+											$($('img')[i]).hide();
+										}
 									}
 									
 									else
@@ -227,7 +268,15 @@ $(function(){
 								{
 									if(products[i].sold_out==='1')
 									{
-										$($('img')[i]).show();
+										if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+										{
+											$($('img')[i]).show();
+										}
+			
+										else
+										{
+											$($('img')[i]).hide();
+										}
 									}
 									
 									else
@@ -238,7 +287,15 @@ $(function(){
 							
 								else
 								{
-									$($('img')[i]).show();
+									if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+									{
+										$($('img')[i]).show();
+									}
+		
+									else
+									{
+										$($('img')[i]).hide();
+									}
 								}
 								count=0;
 							}
@@ -269,7 +326,15 @@ $(function(){
 								{
 									if(products[i].sold_out==='0')
 									{
-										$($('img')[i]).show();
+										if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+										{
+											$($('img')[i]).show();
+										}
+			
+										else
+										{
+											$($('img')[i]).hide();
+										}
 									}
 									
 									else
@@ -281,7 +346,15 @@ $(function(){
 								{
 									if(products[i].sold_out==='1')
 									{
-										$($('img')[i]).show();
+										if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+										{
+											$($('img')[i]).show();
+										}
+			
+										else
+										{
+											$($('img')[i]).hide();
+										}
 									}
 									
 									else
@@ -292,7 +365,15 @@ $(function(){
 							
 								else
 								{
-									$($('img')[i]).show();
+									if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+									{
+										$($('img')[i]).show();
+									}
+		
+									else
+									{
+										$($('img')[i]).hide();
+									}
 								}
 								count=0;
 							}
@@ -327,7 +408,15 @@ $(function(){
 								{
 									if(products[k].sold_out==='0')
 									{
-										$($('img')[k]).show();
+										if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+										{
+											$($('img')[i]).show();
+										}
+			
+										else
+										{
+											$($('img')[i]).hide();
+										}
 									}
 									
 									else
@@ -339,7 +428,15 @@ $(function(){
 								{
 									if(products[k].sold_out==='1')
 									{
-										$($('img')[k]).show();
+										if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+										{
+											$($('img')[i]).show();
+										}
+			
+										else
+										{
+											$($('img')[i]).hide();
+										}
 									}
 									
 									else
@@ -350,7 +447,15 @@ $(function(){
 							
 								else
 								{
-									$($('img')[k]).show();
+									if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+									{
+										$($('img')[i]).show();
+									}
+		
+									else
+									{
+										$($('img')[i]).hide();
+									}
 								}
 							}
 						}
@@ -391,14 +496,21 @@ $(function(){
 		
 		else
 		{
-			//alert('g');
 			if(availSold==='avail')
 			{
 				for(i=0;i<products.length;i++)
 				{
 					if(products[i].sold_out==='0')
 					{
-						$($('img')[i]).show();
+						if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+						{
+							$($('img')[i]).show();
+						}
+
+						else
+						{
+							$($('img')[i]).hide();
+						}
 					}
 				
 					else
@@ -414,282 +526,39 @@ $(function(){
 				{
 					if(products[i].sold_out==='1')
 					{
-						$($('img')[i]).show();
-					}
-				
-					else
-					{
-						$($('img')[i]).hide();
-					}
-				}
-			}
-		
-			else
-			{
-				for(i=0;i<products.length;i++)
-				{
-					$($('img')[i]).show();
-				}
-			}
-		}
-	});
-	
-	
-		
-	
-	$('input').click(function(){
-	
-		var count = 0;
-		var brand=[];
-		var brandNot=[];
-		var clr=[];
-		var clrNot=[];
-		var flag = 0;
-		
-		
-		$('div.brand input:checked').each(function(){
-			brand.push($(this).attr('value'));
-			flag = 1;
-		});
-		
-		$('div.brand input:not(:checked)').each(function(){
-			brandNot.push($(this).attr('value'));
-		});
-		
-		$('div.color input:checked').each(function(){
-			clr.push($(this).attr('value'));
-			flag = 1;
-		});
-		
-		$('div.color input:not(:checked)').each(function(){
-			clrNot.push($(this).attr('value'));
-		});
-		
-		var availSold = $("#toggle option:selected").attr("value");
-		
-		
-		if(!flag)
-		{
-			for(i=0;i<products.length;i++)
-			{
-				if(availSold==='avail')
-				{
-					if(products[i].sold_out==='0')
-					{
-						$($('img')[i]).show();
-					}
-					
-					else
-					{
-						$($('img')[i]).hide();
-					}
-				}
-				else if(availSold==='sold')
-				{
-					if(products[i].sold_out==='1')
-					{
-						$($('img')[i]).show();
-					}
-					
-					else
-					{
-						$($('img')[i]).hide();
-					}
-				}
-				
-				else
-				{
-					$($('img')[i]).show();
-				}
-			}
-		}
+						if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
+						{
+							$($('img')[i]).show();
+						}
 
-		
-		
-		if(!(brand.length && clr.length))
-		{
-			if(brand.length)
-			{
-				for(i=0;i<products.length;i++)
-				{
-					for(j=0;j<brand.length;j++)
-					{
-						if((products[i].brand===brand[j]))
-						{
-							if(availSold==='avail')
-							{
-								if(products[i].sold_out==='0')
-								{
-									$($('img')[i]).show();
-								}
-								
-								else
-								{
-									$($('img')[i]).hide();
-								}
-							}
-							else if(availSold==='sold')
-							{
-								if(products[i].sold_out==='1')
-								{
-									$($('img')[i]).show();
-								}
-								
-								else
-								{
-									$($('img')[i]).hide();
-								}
-							}
-							
-							else
-							{
-								$($('img')[i]).show();
-							}
-							count=0;
-						}
-						
 						else
 						{
-							count++;
-							if(count===brand.length)
-							{
-								$($('img')[i]).hide();
-								count=0;
-							}
+							$($('img')[i]).hide();
 						}
-						
+					}
+				
+					else
+					{
+						$($('img')[i]).hide();
 					}
 				}
 			}
-			
+		
 			else
 			{
 				for(i=0;i<products.length;i++)
 				{
-					for(j=0;j<clr.length;j++)
+					if(parseInt(products[i].price)>=minVal && parseInt(products[i].price)<=maxVal)
 					{
-						if((products[i].color===clr[j]))
-						{
-							if(availSold==='avail')
-							{
-								if(products[i].sold_out==='0')
-								{
-									$($('img')[i]).show();
-								}
-								
-								else
-								{
-									$($('img')[i]).hide();
-								}
-							}
-							else if(availSold==='sold')
-							{
-								if(products[i].sold_out==='1')
-								{
-									$($('img')[i]).show();
-								}
-								
-								else
-								{
-									$($('img')[i]).hide();
-								}
-							}
-							
-							else
-							{
-								$($('img')[i]).show();
-							}
-							count=0;
-						}
-					
-						else
-						{
-							count++;
-							if(count===clr.length)
-							{
-								$($('img')[i]).hide();
-								count=0;
-							}
-						}
-					
+						$($('img')[i]).show();
+					}
+
+					else
+					{
+						$($('img')[i]).hide();
 					}
 				}
 			}
 		}
-		
-		else
-		{
-		
-			for(i=0;i<brand.length;i++)
-			{
-				for(j=0;j<clr.length;j++)
-				{
-					for(k=0;k<products.length;k++)
-					{
-						if(brand[i]===products[k].brand && clr[j]===products[k].color)
-						{
-							if(availSold==='avail')
-							{
-								if(products[k].sold_out==='0')
-								{
-									$($('img')[k]).show();
-								}
-								
-								else
-								{
-									$($('img')[i]).hide();
-								}
-							}
-							else if(availSold==='sold')
-							{
-								if(products[k].sold_out==='1')
-								{
-									$($('img')[k]).show();
-								}
-								
-								else
-								{
-									$($('img')[i]).hide();
-								}
-							}
-							
-							else
-							{
-								$($('img')[k]).show();
-							}
-						}
-					}
-				}
-			}
-		
-			for(i=0;i<brand.length;i++)
-			{
-				for(j=0;j<clrNot.length;j++)
-				{
-					for(k=0;k<products.length;k++)
-					{
-						if(brand[i]===products[k].brand && clrNot[j]===products[k].color)
-						{
-							$($('img')[k]).hide();
-						}
-					}
-				}
-			}
-			
-			
-			for(i=0;i<brandNot.length;i++)
-			{
-				for(j=0;j<clr.length;j++)
-				{
-					for(k=0;k<products.length;k++)
-					{
-						if(brandNot[i]===products[k].brand && clr[j]===products[k].color)
-						{
-							$($('img')[k]).hide();
-						}
-					}
-				}
-			}
-		}	
-	});
+	}
 });

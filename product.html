@@ -1,13 +1,25 @@
 <html>
 
 	<head>
-	
 		<link rel="stylesheet" type="text/css" href="style/catalogue.css" />
-		
 		<script type="text/javascript" src="Filter/jquery.js"></script>	
+		<link rel="stylesheet" href="style/jquery.ui.all.css"/>
+	    <script src="Filter/jquery-1.7.1.min.js"></script>
+	    <script src="Filter/jquery.ui.core.js"></script>
+	    <script src="Filter/jquery.ui.widget.js"></script>
+	    <script src="Filter/jquery.ui.mouse.js"></script>
+	    <script src="Filter/jquery.ui.slider.js"></script>
+	    <link rel="stylesheet" href="style/demos.css"/>
+		<script type="text/javascript" src="Filter/filter.js"></script>	
 		
-		<script type="text/javascript" src="Filter/test.js"></script>	
-		
+		 <style>
+			#demo-frame > div.demo { padding: 10px !important; };
+			#slider
+			{
+				position:relative;
+				top:-50px;
+			}
+		</style>
 	</head>
 	
 	<body>
@@ -20,7 +32,6 @@
 					<option value="select" selected="selected">Select</option>
 					<option value="name">Sort By Brand Name</option>
 					<option value="color">Sort By Color</option>
-					<option value="avail">Sort By Availability</option>
 				</select>
 
 				<div class="headerText">
@@ -76,6 +87,17 @@
 			<div class="display">
 			</div>
 			
+			<div class="slider">
+				<div class="demo">
+					<p>
+						<label for="amount"></label>
+						<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+					</p>
+
+					<div id="slider-range"></div>
+				</div>
+			</div>
+
 		</div>
 	</body>
 	
