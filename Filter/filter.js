@@ -172,14 +172,15 @@ $(function(){
 	{
 		$( "#slider-range" ).slider({
 			range: true,
-			step:5,
+			step: 5,
 			min: 5,
 			max: 100,
-			values: [ 30, 70 ],
-			slide: function( event, ui ) {
+			values: [ 5, 100 ],
+			animate: true,
+			slide: function(event,ui) {
 				$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-				filterProducts();
-			}
+			},
+			stop: filterProducts
 		
 		});
 	
